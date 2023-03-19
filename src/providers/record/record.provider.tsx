@@ -6,11 +6,14 @@ import { FCWithChildren } from "../../common/types/general.types";
 import { ErrorQuery } from "../../common/types/use-query.types";
 import {
   createRecord as createRecordFn,
+  deleteRecord as deleteRecordFn,
   getRecords,
 } from "../../network/record.network";
 import {
   CreateRecordResponse,
   CreateRecordVariables,
+  DeleteRecordResponse,
+  DeleteRecordVariables,
   RecordsResponse,
   UseRecord,
 } from "./types";
@@ -27,6 +30,9 @@ const initialRecordContext: UseRecord = [
     createRecordData: undefined,
     createRecordError: undefined,
     createRecordLoading: false,
+    deleteRecordData: undefined,
+    deleteRecordError: undefined,
+    deleteRecordLoading: false,
   },
   {
     getRecords: () => void 0,
@@ -34,6 +40,7 @@ const initialRecordContext: UseRecord = [
     onPaginationChange: (_) => void 0,
     onSortingChange: (_) => void 0,
     createRecord: (_) => void 0,
+    deleteRecord: (_) => void 0,
   },
 ];
 
@@ -76,9 +83,20 @@ export const RecordProvider: FCWithChildren = ({ children }) => {
     isLoading: createRecordLoading,
     mutate,
     isSuccess,
+    reset,
   } = useMutation<CreateRecordResponse, ErrorQuery, CreateRecordVariables>(
     [QueryActions.RECORD_POST],
     createRecordFn
+  );
+  const {
+    data: deleteRecordData,
+    error: deleteRecordError,
+    isLoading: deleteRecordLoading,
+    mutate: mutateDelete,
+    isSuccess: isSuccessDelete,
+  } = useMutation<DeleteRecordResponse, ErrorQuery, DeleteRecordVariables>(
+    [QueryActions.RECORD_DELETE],
+    deleteRecordFn
   );
 
   const performFetchRecords = useCallback(() => refetch(), [refetch]);
@@ -123,10 +141,11 @@ export const RecordProvider: FCWithChildren = ({ children }) => {
   }, [pagination.pageIndex]);
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || isSuccessDelete) {
+      reset();
       refetchRecords();
     }
-  }, [isSuccess, refetchRecords]);
+  }, [isSuccess, isSuccessDelete, refetchRecords, reset]);
 
   return (
     <RecordContext.Provider
@@ -143,6 +162,12 @@ export const RecordProvider: FCWithChildren = ({ children }) => {
             createRecordError?.response?.data?.message ??
             createRecordError?.message,
           createRecordLoading,
+
+          deleteRecordData,
+          deleteRecordError:
+            deleteRecordError?.response?.data?.message ??
+            deleteRecordError?.message,
+          deleteRecordLoading,
         },
         {
           getRecords: () => refetch(),
@@ -150,6 +175,7 @@ export const RecordProvider: FCWithChildren = ({ children }) => {
           onSortingChange: setSorting,
           onPaginationChange: setPagination,
           createRecord,
+          deleteRecord: mutateDelete,
         },
       ]}
     >

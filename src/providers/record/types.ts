@@ -12,6 +12,9 @@ export type UseRecordState = {
   createRecordData: CreateRecordResponse | undefined;
   createRecordError: string | undefined;
   createRecordLoading: boolean;
+  deleteRecordData: DeleteRecordResponse | undefined;
+  deleteRecordError: string | undefined;
+  deleteRecordLoading: boolean;
 };
 
 export type UseRecordDispatch = {
@@ -20,6 +23,7 @@ export type UseRecordDispatch = {
   onSortingChange: React.Dispatch<React.SetStateAction<MRT_SortingState>>;
   onPaginationChange: React.Dispatch<React.SetStateAction<MRT_PaginationState>>;
   createRecord: (record: CreateRecordVariables) => void;
+  deleteRecord: (recordId: number) => void;
 };
 
 export type UseRecord = [UseRecordState, UseRecordDispatch];
@@ -43,3 +47,7 @@ export type CreateRecordVariables = {
   variableLeft?: number;
   variableRight?: number;
 };
+
+export type DeleteRecordResponse = RecordEntity;
+
+export type DeleteRecordVariables = number;

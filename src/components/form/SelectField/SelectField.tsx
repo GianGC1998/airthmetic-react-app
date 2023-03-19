@@ -24,14 +24,19 @@ export const SelectField: FC<SelectFieldProps> = ({
     >
       <InputLabel id={name}>{label}</InputLabel>
       <Select
+        data-testid="select-field"
         labelId={name}
         id={name}
         name={name}
         label={label}
         {...(extraProps ?? {})}
       >
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
+        {options.map((option, index) => (
+          <MenuItem
+            key={option}
+            value={option}
+            data-testid={`select-field-option-${index}`}
+          >
             {option}
           </MenuItem>
         ))}

@@ -16,3 +16,7 @@ export const createRecord = async (record: CreateRecordVariables) => {
   });
   return data;
 };
+export const deleteRecord = async (recordId: number) => {
+  const { data } = await apiManager.delete(`${apiUrls.RECORD_URL}/${recordId}`);
+  return data;
+};

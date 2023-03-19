@@ -13,7 +13,7 @@ import {
 import { FC, useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { OperationType, RecordStatus } from "../../../../common/entities/enums";
-import { SelectField } from "../../../../components/form/ButtonGroupField/ButtonGroupField";
+import { SelectField } from "../../../../components/form/SelectField/SelectField";
 import { TextField } from "../../../../components/form/TextField/TextField";
 import { useRecord } from "../../../../providers/record/record.hook";
 import { CreateRecordVariables } from "../../../../providers/record/types";
